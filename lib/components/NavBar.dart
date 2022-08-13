@@ -18,9 +18,10 @@ class NavBar extends StatefulWidget {
   @override
   State<NavBar> createState() => _NavBarState();
 }
-int globalIndex=1,indexSupp=1;
-class _NavBarState extends State<NavBar> {
 
+int globalIndex=1,indexSupp=1;
+
+class _NavBarState extends State<NavBar> {
   final pages=[
     Container(),
     Container(//home page
@@ -45,65 +46,104 @@ class _NavBarState extends State<NavBar> {
           for(var route in snapshot.data!.toString().split(',')){
             routes.add(route.replaceAll('{','').replaceAll(' ','').replaceAll('}',''));  
           }
-          
-          return Container(//container of the scroll of the routes
-            height: percentage(height, 40),
-            child: ListView.builder(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              padding: const EdgeInsets.all(8),
-              itemCount: snapshot.data!.toString().split(',').length,
-              itemBuilder: (BuildContext context, int index){
-                return Column(
+          int selectedIndex=0;
+          return Column(
+            children: [
+              Container(//container route selected
+                padding: const EdgeInsets.all(20),
+                width: percentage(width, 90),
+                height: percentage(height, 15),
+                color: Colors.black26,
+                child: Row(
                   children: [
-                    GestureDetector(//container of individual route
-                      onTap: (){print('putamadre '+index.toString());},
-                      child:Container(
-                        padding: const EdgeInsets.all(20),
-                        width: percentage(width, 90),
-                        height: percentage(height, 15),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: AppColor.green,
-                            width: 2,
+                    Icon(Icons.bus_alert,size: percentage(height, 10),),
+                    const SizedBox(width: 5),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(//route name
+                          routes[selectedIndex].toString().split(':')[0],
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: Colors.black87
                           ),
                         ),
-                        child: Row(
-                          children: [
-                            Icon(Icons.bus_alert,size: percentage(height, 10),),
-                            const SizedBox(width: 5),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                        SizedBox(height: 5),
+                        Text(//route distance
+                          '${routes[selectedIndex].toString().split(':')[1]} miles',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: Colors.black87
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                )
+              ),
+              SizedBox(height: percentage(height, 7),),
+              Container(//container of the scroll of the routes
+                height: percentage(height, 40),
+                child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.all(8),
+                  itemCount: snapshot.data!.toString().split(',').length,
+                  itemBuilder: (BuildContext context, int index){
+                    return Column(
+                      children: [
+                        GestureDetector(//container of individual route
+                          onTap: ()=>{selectedIndex=index},
+                          child:Container(
+                            padding: const EdgeInsets.all(20),
+                            width: percentage(width, 90),
+                            height: percentage(height, 15),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: AppColor.green,
+                                width: 2,
+                              ),
+                            ),
+                            child: Row(
                               children: [
-                                Text(//route name
-                                  routes[index].toString().split(':')[0],
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                    color: Colors.black87
-                                  ),
-                                ),
-                                SizedBox(height: 5),
-                                Text(//route distance
-                                  '${routes[index].toString().split(':')[1]} miles',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                    color: Colors.black87
-                                  ),
+                                Icon(Icons.bus_alert,size: percentage(height, 10),),
+                                const SizedBox(width: 5),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(//route name
+                                      routes[index].toString().split(':')[0],
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                        color: Colors.black87
+                                      ),
+                                    ),
+                                    SizedBox(height: 5),
+                                    Text(//route distance
+                                      '${routes[index].toString().split(':')[1]} miles',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                        color: Colors.black87
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
-                            ),
-                          ],
-                        )
-                      )
-                    ) ,
-                    const SizedBox(height: 8,)
-                  ],
-                );
-              }
-            ),
-          );
+                            )
+                          )
+                        ) ,
+                        const SizedBox(height: 8,)
+                      ],
+                    );
+                  }
+                ),
+              )
+            ]
+          ); 
         }
         if(snapshot.connectionState==ConnectionState.waiting||!snapshot.hasData){
           return const CircularProgressIndicator();
@@ -112,6 +152,7 @@ class _NavBarState extends State<NavBar> {
       },
     )
   ];
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(//decorations
@@ -188,4 +229,4 @@ class _NavBarState extends State<NavBar> {
       ]
     );
   }
-}
+} 
