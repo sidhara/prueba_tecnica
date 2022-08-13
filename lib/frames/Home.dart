@@ -102,6 +102,9 @@ class _HomeState extends State<Home> {
   }
 
   onPressed(){
-    
+    setState(() {
+      globalIndex=5;
+      indexSupp=1;
+    });
   }
 }

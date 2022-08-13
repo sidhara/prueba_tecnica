@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, sized_box_for_whitespace
+// ignore_for_file: file_names, sized_box_for_whitespace, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,10 +18,9 @@ class NavBar extends StatefulWidget {
   @override
   State<NavBar> createState() => _NavBarState();
 }
-
+int globalIndex=1,indexSupp=1;
 class _NavBarState extends State<NavBar> {
 
-  int index=1;//put this out
   final pages=[
     Container(),
     Container(//home page
@@ -47,8 +46,7 @@ class _NavBarState extends State<NavBar> {
             routes.add(route.replaceAll('{','').replaceAll(' ','').replaceAll('}',''));  
           }
           
-          return Container(
-            width: width,
+          return Container(//container of the scroll of the routes
             height: percentage(height, 40),
             child: ListView.builder(
               scrollDirection: Axis.vertical,
@@ -58,45 +56,48 @@ class _NavBarState extends State<NavBar> {
               itemBuilder: (BuildContext context, int index){
                 return Column(
                   children: [
-                    Container(
-                      padding: const EdgeInsets.all(20),
-                      width: percentage(width, 90),
-                      height: percentage(height, 15),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: AppColor.green,
-                          width: 2,
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(Icons.bus_alert,size: percentage(height, 10),),
-                          const SizedBox(width: 5),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(//route name
-                                routes[index].toString().split(':')[0],
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                  color: Colors.black87
-                                ),
-                              ),
-                              SizedBox(height: 5),
-                              Text(//route distance
-                                '${routes[index].toString().split(':')[1]} miles',
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                  color: Colors.black87
-                                ),
-                              ),
-                            ],
+                    GestureDetector(//container of individual route
+                      onTap: (){print('putamadre '+index.toString());},
+                      child:Container(
+                        padding: const EdgeInsets.all(20),
+                        width: percentage(width, 90),
+                        height: percentage(height, 15),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: AppColor.green,
+                            width: 2,
                           ),
-                        ],
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(Icons.bus_alert,size: percentage(height, 10),),
+                            const SizedBox(width: 5),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(//route name
+                                  routes[index].toString().split(':')[0],
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                    color: Colors.black87
+                                  ),
+                                ),
+                                SizedBox(height: 5),
+                                Text(//route distance
+                                  '${routes[index].toString().split(':')[1]} miles',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                    color: Colors.black87
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        )
                       )
-                    ),
+                    ) ,
                     const SizedBox(height: 8,)
                   ],
                 );
@@ -120,7 +121,7 @@ class _NavBarState extends State<NavBar> {
     );
     return Column(
       children: [
-        pages[5],
+        pages[globalIndex],
         Container(//Nav Bar
           decoration: BoxDecoration(
             border: Border(
@@ -131,7 +132,7 @@ class _NavBarState extends State<NavBar> {
             ),
           ),
           child: NavigationBar(
-            selectedIndex: index,
+            selectedIndex: indexSupp,
             onDestinationSelected: (index) async {
               if(index==4){
                 deleteLoginCredentials();
@@ -151,7 +152,8 @@ class _NavBarState extends State<NavBar> {
                 );   
               }
               setState(() {
-                this.index=index;
+                indexSupp=index;
+                globalIndex=index;
               });
             },
             destinations: [ 
