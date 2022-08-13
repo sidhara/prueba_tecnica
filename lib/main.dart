@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
-import 'frames/Login.dart';
+import 'package:prueba_tecnica/configurations/Firebase.dart';//import for initialization of firebase
+import 'package:prueba_tecnica/configurations/LocalStore.dart';
+import 'package:prueba_tecnica/frames/Home.dart';
+import 'frames/Login.dart';//import for navigation
 
-void main() {
+
+
+Future<void> main() async {
+  initialize();
   runApp(const MyApp());
 }
 
@@ -9,10 +15,10 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
     return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Login()
-    );
+        debugShowCheckedModeBanner: false,
+        home: Login()
+      );
   }
 }

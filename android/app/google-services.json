@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "293500240654",
+    "project_id": "prueba-tecnica-dashfleet",
+    "storage_bucket": "prueba-tecnica-dashfleet.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:293500240654:android:5985cff6cc4e2b444e8d5f",
+        "android_client_info": {
+          "package_name": "com.example.prueba_tecnica"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "293500240654-4vntq77ltpa0ojbbre3364gv9pua4gvr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkf4wGob77oD-PEm6K29I66mFbguKFmI8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "293500240654-4vntq77ltpa0ojbbre3364gv9pua4gvr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

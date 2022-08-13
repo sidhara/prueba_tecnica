@@ -1,12 +1,16 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, sized_box_for_whitespace
 
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';//import for the device orientation
 
-import 'package:prueba_tecnica/components/Button.dart';//import for the components
+import 'package:prueba_tecnica/components/Button.dart';//imports for the components
 import 'package:prueba_tecnica/components/TextField.dart';
 import '../components/Colors.dart';
+
+import 'package:prueba_tecnica/frames/Home.dart';//import for navigation
+
+import 'package:prueba_tecnica/configurations/LocalStore.dart';//imports for local storage and configurations
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -20,14 +24,24 @@ class _LoginState extends State<Login> {
   late double height,width;//dimensions of the device
 
   @override
-  void initState() {
+  void initState(){
+    skip();
     rememberPassword=false;
     super.initState();
     SystemChrome.setPreferredOrientations([//controlling the device orientation
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
     ]);
-    
+  }
+
+  skip()async{//I didn't enjoy doing this
+    if(await hasCredentials()){
+      Navigator.pushAndRemoveUntil(//navigation to home
+        context,
+        MaterialPageRoute(builder: (context) => const Home()),
+        (route) => false
+      );   
+    }
   }
 
   @override
@@ -114,7 +128,7 @@ class _LoginState extends State<Login> {
           Row(
             children: [
               AnimatedContainer(//this can definitely be way better
-                duration: Duration(milliseconds: 200),
+                duration: const Duration(milliseconds: 200),
                 height: 30,
                 width: 40,
                 decoration: BoxDecoration(
@@ -124,7 +138,7 @@ class _LoginState extends State<Login> {
                 child: Stack(
                   children: <Widget>[
                     AnimatedPositioned(
-                      duration: Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 200),
                       curve: Curves.easeIn,
                       top: 3,
                       left: rememberPassword?15:0,
@@ -134,12 +148,11 @@ class _LoginState extends State<Login> {
                           setState(() {
                             rememberPassword=!rememberPassword;
                           });
-                          onPressed(2);
                         },
                         child: AnimatedSwitcher(
-                          duration: Duration(milliseconds: 200),
+                          duration: const Duration(milliseconds: 200),
                           transitionBuilder: (Widget child, Animation<double> animation) {
-                            return RotationTransition(child: child,turns: animation);
+                            return RotationTransition(turns: animation, child: child);
                           },
                           child: rememberPassword?Icon(Icons.check_circle, key: UniqueKey(),):Icon(Icons.remove_circle_outline, key: UniqueKey(),)
                         ),
@@ -205,18 +218,40 @@ class _LoginState extends State<Login> {
     );
   }
 
-  onPressed(int option){
+  onPressed(int option) async {
     if(option==0){
-      print('login');
+      if(await validations(phoneNumberController.text,passwordController.text)){
+        if(rememberPassword){
+          saveLoginCredentials(phoneNumberController.text);
+        }
+        Navigator.pushAndRemoveUntil(//navigation to home
+          context,
+          MaterialPageRoute(builder: (context) => const Home()),
+          (route) => false
+        );   
+      }else{
+        passwordController.clear();
+        phoneNumberController.clear();
+        return showDialog(
+          context: context,
+          builder: (context){
+            return const AlertDialog(
+              title: Text('Error!'),
+              content: Text('Invalid phone number or password.'),
+            );
+          }
+        );
+      }
     }else if(option==1){
-      print('password recovery');
-    }else if(option==2){
-      print('remember password');
-      print(rememberPassword);
+      return showDialog(
+        context: context,
+        builder: (context){
+          return const AlertDialog(
+            title: Text('Password recovery'),
+            content: Text('we already sent a email with further instruction for password recovery.'),
+          );
+        }
+      );
     }
-  }
-
-  percentage(double input, int percentage){//calculates percentages
-    return (input/100)*percentage;
   }
 }
