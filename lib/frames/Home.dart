@@ -5,11 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';//import for the device orientation
 
 import 'package:prueba_tecnica/components/Colors.dart';//imports for the components
+import 'package:prueba_tecnica/components/NavBar.dart';
+import 'package:prueba_tecnica/components/ProfileInfo.dart';
 
 import 'package:prueba_tecnica/configurations/LocalStore.dart';//import for local storage and configurations
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  final String phoneNumber;
+  const Home({Key? key, required this.phoneNumber}) : super(key: key);
 
   @override
   State<Home> createState() => _HomeState();
@@ -44,7 +47,9 @@ class _HomeState extends State<Home> {
     return Stack(
       children: [
         tray(percentage(height, 20)),
-        userProfile(percentage(height, 5),'Sidhar Araujo','Barranquilla, Atlantico')
+        sideHomeMenu(percentage(height, 8)),
+        userProfile(percentage(height, 5),widget.phoneNumber),
+        navBar()
       ],
     );
   }
@@ -65,11 +70,40 @@ class _HomeState extends State<Home> {
     );
   }
 
-  userProfile(double distanceFromTop, String Name, String info){
+  sideHomeMenu(double distanceFromTop){
     return Positioned(
-      child: Row(
-        
+      top: distanceFromTop,
+      right: percentage(width, 3),
+      child: GestureDetector(
+        onTap: () => onPressed(0),
+        child: Icon(
+        Icons.menu,
+        size: percentage(width, 14),
+        color: Colors.white),
       )
+
     );
+  }
+
+  userProfile(double distanceFromTop,String phoneNumber){
+    return Positioned(
+      left: percentage(width, 3),
+      width: percentage(width, 81),
+      top: distanceFromTop,
+      child: ProfileInfo(phoneNumber: phoneNumber)
+    );
+  }
+
+  navBar(){
+    return Positioned(
+      width: width,
+      bottom: 0,
+      child: const NavBar());
+  }
+
+  onPressed(int option){
+    if(option==0){
+      print('side menu (Rutas)');
+    }
   }
 }

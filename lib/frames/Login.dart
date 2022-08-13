@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, sized_box_for_whitespace
+// ignore_for_file: file_names, sized_box_for_whitespace, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 
@@ -36,9 +36,10 @@ class _LoginState extends State<Login> {
 
   skip()async{//I didn't enjoy doing this
     if(await hasCredentials()){
+      String credential=await getLoginCredentials() as String;
       Navigator.pushAndRemoveUntil(//navigation to home
         context,
-        MaterialPageRoute(builder: (context) => const Home()),
+        MaterialPageRoute(builder: (context) => Home(phoneNumber: credential,)),
         (route) => false
       );   
     }
@@ -226,7 +227,7 @@ class _LoginState extends State<Login> {
         }
         Navigator.pushAndRemoveUntil(//navigation to home
           context,
-          MaterialPageRoute(builder: (context) => const Home()),
+          MaterialPageRoute(builder: (context) => Home(phoneNumber: encryptingSHA256(phoneNumberController.text),)),
           (route) => false
         );   
       }else{
