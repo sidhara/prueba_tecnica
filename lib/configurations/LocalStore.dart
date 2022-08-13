@@ -46,8 +46,8 @@ encryptingSHA256(String input){
 Future<bool> validations(String phoneNumber, String password) async {
   List credentials=await getLoginCollection();
   for (var credential in credentials) {
-    if(encryptingSHA256(phoneNumber)==credential.toString().substring(9,9+64)){
-      if(encryptingSHA256(password)==credential.toString().substring(85,85+64)){
+    if(encryptingSHA256(phoneNumber)==credential['Number']){
+      if(encryptingSHA256(password)==credential['Password']){
         return true;
       }
     }

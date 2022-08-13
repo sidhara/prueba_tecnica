@@ -49,7 +49,7 @@ class _HomeState extends State<Home> {
         tray(percentage(height, 20)),
         sideHomeMenu(percentage(height, 8)),
         userProfile(percentage(height, 5),widget.phoneNumber),
-        navBar()
+        navBar(widget.phoneNumber)
       ],
     );
   }
@@ -75,7 +75,7 @@ class _HomeState extends State<Home> {
       top: distanceFromTop,
       right: percentage(width, 3),
       child: GestureDetector(
-        onTap: () => onPressed(0),
+        onTap: () => onPressed(),
         child: Icon(
         Icons.menu,
         size: percentage(width, 14),
@@ -94,16 +94,14 @@ class _HomeState extends State<Home> {
     );
   }
 
-  navBar(){
+  navBar(String phoneNumber){
     return Positioned(
       width: width,
       bottom: 0,
-      child: const NavBar());
+      child: NavBar(phoneNumber: phoneNumber,));
   }
 
-  onPressed(int option){
-    if(option==0){
-      print('side menu (Rutas)');
-    }
+  onPressed(){
+    
   }
 }

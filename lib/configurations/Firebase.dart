@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:prueba_tecnica/configurations/LocalStore.dart';
 
 Future<String>getImageUrl(String fileName)async{
   FirebaseStorage storage=FirebaseStorage.instance;
@@ -20,28 +21,41 @@ getLoginCollection()async{
 }
 
 Future<String>getUserName(String phoneNumber)async{
-  CollectionReference loginInfo=FirebaseFirestore.instance.collection('UsersInfo');
-    QuerySnapshot snapshot = await loginInfo.get();
-    List users = snapshot.docs.map((doc) => doc.data()).toList();
-    String name='';
+  CollectionReference userName=FirebaseFirestore.instance.collection('UsersInfo');
+  QuerySnapshot snapshot = await userName.get();
+  List users = snapshot.docs.map((doc) => doc.data()).toList();
+  String name='';
     for(var user in users){
       if(user['Number']==phoneNumber){
         name=user['Name'];
       } 
     }
-    return name;
+  return name;
 }
 Future<String>getUserInfo(String phoneNumber)async{
-  CollectionReference loginInfo=FirebaseFirestore.instance.collection('UsersInfo');
-    QuerySnapshot snapshot = await loginInfo.get();
-    List users = snapshot.docs.map((doc) => doc.data()).toList();
-    String info='';
+  CollectionReference userInfo=FirebaseFirestore.instance.collection('UsersInfo');
+  QuerySnapshot snapshot = await userInfo.get();
+  List users = snapshot.docs.map((doc) => doc.data()).toList();
+  String info='';
     for(var user in users){
       if(user['Number']==phoneNumber){
         info=user['Info'];
       } 
     }
-    return info;
+  return info;
+}
+Future<dynamic>getRoutes()async{
+  String? phoneNumber=await getLoginCredentials();
+  CollectionReference routesInfo=FirebaseFirestore.instance.collection('Routes');
+  QuerySnapshot snapshot = await routesInfo.get();
+  List routes = snapshot.docs.map((doc) => doc.data()).toList();
+  dynamic userRoute;
+      for(var route in routes){
+      if(route['Number']==phoneNumber){
+        userRoute=route['Routes'];
+      } 
+    }
+  return userRoute;
 }
 
 initialize()async{
