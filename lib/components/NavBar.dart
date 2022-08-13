@@ -1,11 +1,12 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, sized_box_for_whitespace
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:prueba_tecnica/components/Colors.dart';//imports for components
 import 'package:prueba_tecnica/components/ProfileInfo.dart';
-import 'package:prueba_tecnica/configurations/Firebase.dart';
+
+import 'package:prueba_tecnica/configurations/Firebase.dart';//imports for data fecht and configurations
 import 'package:prueba_tecnica/configurations/LocalStore.dart';
 
 import 'package:prueba_tecnica/frames/Login.dart';//import for navigation
@@ -23,7 +24,7 @@ class _NavBarState extends State<NavBar> {
   int index=1;//put this out
   final pages=[
     Container(),
-    Container(//home
+    Container(//home page
       width: width,
       height: percentage(height, 70),
       alignment: Alignment.center,
@@ -37,11 +38,71 @@ class _NavBarState extends State<NavBar> {
     Container(),
     Container(),
     Container(),
-    FutureBuilder(
+    FutureBuilder(//routes page
       future: getRoutes(),
       builder: (BuildContext context, AsyncSnapshot<dynamic>snapshot){
         if(snapshot.connectionState==ConnectionState.done&&snapshot.hasData){
-          print(snapshot.data!);
+          List routes=[];
+          for(var route in snapshot.data!.toString().split(',')){
+            routes.add(route.replaceAll('{','').replaceAll(' ','').replaceAll('}',''));  
+          }
+          
+          return Container(
+            width: width,
+            height: percentage(height, 40),
+            child: ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              padding: const EdgeInsets.all(8),
+              itemCount: snapshot.data!.toString().split(',').length,
+              itemBuilder: (BuildContext context, int index){
+                return Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      width: percentage(width, 90),
+                      height: percentage(height, 15),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: AppColor.green,
+                          width: 2,
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.bus_alert,size: percentage(height, 10),),
+                          const SizedBox(width: 5),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(//route name
+                                routes[index].toString().split(':')[0],
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: Colors.black87
+                                ),
+                              ),
+                              SizedBox(height: 5),
+                              Text(//route distance
+                                '${routes[index].toString().split(':')[1]} miles',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: Colors.black87
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      )
+                    ),
+                    const SizedBox(height: 8,)
+                  ],
+                );
+              }
+            ),
+          );
         }
         if(snapshot.connectionState==ConnectionState.waiting||!snapshot.hasData){
           return const CircularProgressIndicator();

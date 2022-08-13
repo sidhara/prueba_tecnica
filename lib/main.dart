@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:prueba_tecnica/configurations/Firebase.dart';//import for initialization of firebase
-import 'package:prueba_tecnica/configurations/LocalStore.dart';
-import 'package:prueba_tecnica/frames/Home.dart';
+
 import 'frames/Login.dart';//import for navigation
-
-
 
 Future<void> main() async {
   initialize();
