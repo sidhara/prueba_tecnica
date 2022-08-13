@@ -7,16 +7,31 @@ import 'package:prueba_tecnica/configurations/Firebase.dart';//import for gettin
 
 import 'package:shared_preferences/shared_preferences.dart';//import for local store
 
+
+Future rememberPasswordOnLocal()async{
+  final preferences=await SharedPreferences.getInstance();
+  await preferences.setString('remember', 'true');
+}
+Future<bool> rememberedOnLocal()async{
+  final preferences=await SharedPreferences.getInstance();
+  final String? remember=preferences.getString('remember');
+  if(remember==null){
+    return false;
+  }else{return true;}
+}
+Future deleteLocalPersistence()async{
+  final preferences=await SharedPreferences.getInstance();
+  preferences.remove('remember');
+}
+
 Future saveLoginCredentials(String phoneNumber)async{
   final preferences=await SharedPreferences.getInstance();
   await preferences.setString('phoneNumber', encryptingSHA256(phoneNumber));
 }
-
 Future deleteLoginCredentials()async{
   final preferences=await SharedPreferences.getInstance();
   preferences.remove('phoneNumber');
 }
-
 Future<bool> hasCredentials() async {
   final preferences=await SharedPreferences.getInstance();
   final String? phoneNumber=preferences.getString('phoneNumber');
@@ -24,7 +39,6 @@ Future<bool> hasCredentials() async {
     return false;
   }else{return true;}
 }
-
 Future<String?> getLoginCredentials()async{
   final preferences=await SharedPreferences.getInstance();
   final String? phoneNumber=preferences.getString('phoneNumber');

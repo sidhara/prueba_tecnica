@@ -35,7 +35,7 @@ class _LoginState extends State<Login> {
   }
 
   skip()async{//I didn't enjoy doing this
-    if(await hasCredentials()){
+    if(await rememberedOnLocal()){
       String credential=await getLoginCredentials() as String;
       Navigator.pushAndRemoveUntil(//navigation to home
         context,
@@ -223,8 +223,9 @@ class _LoginState extends State<Login> {
     if(option==0){
       if(await validations(phoneNumberController.text,passwordController.text)){
         if(rememberPassword){
-          saveLoginCredentials(phoneNumberController.text);
+          await rememberPasswordOnLocal();
         }
+        saveLoginCredentials(phoneNumberController.text);
         Navigator.pushAndRemoveUntil(//navigation to home
           context,
           MaterialPageRoute(builder: (context) => Home(phoneNumber: encryptingSHA256(phoneNumberController.text),)),
